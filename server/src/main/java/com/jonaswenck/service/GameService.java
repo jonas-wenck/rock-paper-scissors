@@ -4,10 +4,12 @@ import com.jonaswenck.constants.Result;
 import com.jonaswenck.constants.Symbol;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * This service encapsulates the business logic of playing a game of rock, paper, scissors.
  */
+@Service
 public class GameService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameService.class);
