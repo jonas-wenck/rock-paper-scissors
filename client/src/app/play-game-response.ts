@@ -1,7 +1,5 @@
-import {GameSymbol} from './gameSymbol';
-
 export interface PlayGameResponse {
-    playerSymbol: GameSymbol;
-    opponentSymbol: GameSymbol;
+    playerSymbol: 'ROCK' | 'PAPER' | 'SCISSORS';
+    opponentSymbol: 'ROCK' | 'PAPER' | 'SCISSORS';
     result: 'PLAYER_WIN' | 'PLAYER_LOSS' | 'DRAW';
 }

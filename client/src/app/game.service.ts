@@ -1,6 +1,5 @@
 import {inject, Injectable} from '@angular/core';
 import {PlayGameResponse} from "./play-game-response";
-import {GameSymbol} from './gameSymbol';
 import {HttpClient} from "@angular/common/http";
 import {catchError, Observable, share} from "rxjs";
 
@@ -11,7 +10,7 @@ export class GameService {
     url = 'http://localhost:8080/rock-paper-scissors/play-game';
     private httpClient = inject(HttpClient);
 
-    playGame(symbol: GameSymbol): Observable<PlayGameResponse> {
+    playGame(symbol: 'ROCK' | 'PAPER' | 'SCISSORS'): Observable<PlayGameResponse> {
         // create the request with the player symbol
         const request = {playerSymbol: symbol};
 
