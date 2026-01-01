@@ -1,11 +1,11 @@
 import {Component, input} from '@angular/core';
-import {NgOptimizedImage} from "@angular/common";
 import {PlayGameResponse} from "../play-game-response";
+import {SingleResult} from "../single-result/single-result";
 
 @Component({
     selector: 'app-result',
     imports: [
-        NgOptimizedImage
+        SingleResult
     ],
     template: `
         <!-- display the result-->
@@ -20,33 +20,13 @@ import {PlayGameResponse} from "../play-game-response";
         </div>
         <div class="flex justify-between">
             <!-- display the symbol chosen by the player -->
-            <div class="flex flex-col items-center">
-                <p class="text-4xl">You chose: {{ playGameResponse().playerSymbol }}</p>
-                <img [ngSrc]="imageMap[playGameResponse().playerSymbol]" height="100"
-                     width="100" [alt]="imageAltMap[playGameResponse().playerSymbol]" priority/>
-            </div>
+            <app-single-result title="You" [symbol]="playGameResponse().playerSymbol"/>
             <!-- display the symbol chosen by the opponent -->
-            <div class="flex flex-col items-center">
-                <p class="text-4xl">Opponent chose: {{ playGameResponse().opponentSymbol }}</p>
-                <img [ngSrc]="imageMap[playGameResponse().opponentSymbol]" height="100"
-                     width="100" [alt]="imageAltMap[playGameResponse().opponentSymbol]" priority/>
-            </div>
+            <app-single-result title="Opponent" [symbol]="playGameResponse().opponentSymbol"/>
         </div>
     `,
     styles: ``,
 })
 export class Result {
     playGameResponse = input.required<PlayGameResponse>();
-
-    readonly imageMap: Record<string, string> = {
-        'ROCK': 'assets/rock-svgrepo-com.svg',
-        'PAPER': 'assets/rolled-up-newspaper-svgrepo-com.svg',
-        'SCISSORS': 'assets/scissors-svgrepo-com.svg',
-    };
-
-    readonly imageAltMap: Record<string, string> = {
-        'ROCK': 'Rock',
-        'PAPER': 'Paper',
-        'SCISSORS': 'Scissors',
-    };
 }
