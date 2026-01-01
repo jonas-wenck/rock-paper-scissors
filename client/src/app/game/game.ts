@@ -7,11 +7,12 @@ import {MatButton, MatFabButton} from "@angular/material/button";
 import {MatIcon, MatIconRegistry} from "@angular/material/icon";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Result} from "../result/result";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
     selector: 'app-game',
     imports: [
-        AsyncPipe, MatIcon, MatFabButton, Result, MatButton
+        AsyncPipe, MatIcon, MatFabButton, Result, MatButton, MatTooltip
     ],
     template: `
         <div>
@@ -28,15 +29,18 @@ import {Result} from "../result/result";
                 <div class="flex flex-col items-center gap-6">
                     <h2 class="text-4xl">Select your symbol</h2>
                     <div class="flex flex-row gap-3">
-                        <button matFab extended (click)="playGame('ROCK')">
+                        <button matFab extended (click)="playGame('ROCK')"
+                                matTooltip="Beats scissors and is beaten by paper.">
                             <mat-icon svgIcon="rock"></mat-icon>
                             Rock
                         </button>
-                        <button matFab extended (click)="playGame('PAPER')">
+                        <button matFab extended (click)="playGame('PAPER')"
+                                matTooltip="Beats rock and is beaten by scissors.">
                             <mat-icon svgIcon="paper"></mat-icon>
                             Paper
                         </button>
-                        <button matFab extended (click)="playGame('SCISSORS')">
+                        <button matFab extended (click)="playGame('SCISSORS')"
+                                matTooltip="Beats paper and is beaten by rock.">
                             <mat-icon svgIcon="scissors"></mat-icon>
                             Scissors
                         </button>
