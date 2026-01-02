@@ -4,6 +4,7 @@ build/
 server/gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+server/src/main/resources/secrets.properties
 
 ### STS ###
 .apt_generated
@@ -35,6 +36,7 @@ out/
 /e2e/test-output/
 /.angular/
 .angular/
+/client/src/environments/environment.development.ts
 
 # Node modules and dependency files
 client/node_modules/

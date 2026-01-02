@@ -1,5 +1,6 @@
 package com.jonaswenck.handler;
 
+import com.jonaswenck.configuration.SecurityConfig;
 import com.jonaswenck.constants.Symbol;
 import com.jonaswenck.service.GameService;
 import com.jonaswenck.service.RandomSymbolService;
@@ -11,17 +12,19 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
+import static com.jonaswenck.security.AuthenticationService.API_KEY_HEADER_NAME;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(RockPaperScissorsHandler.class)
 @AutoConfigureRestTestClient
-// import the game service bean as we do not want to mock that
-@Import(GameService.class)
+// import the beans that are not auto-imported by the @WebMvcTest-annotation
+@Import({GameService.class, SecurityConfig.class})
 class RockPaperScissorsHandlerTest {
+
+    private static final String TEST_API_KEY = "U86p7k1o7Q2Bgi4J3AVuOuCBu79MMF";
 
     @Autowired
     private RestTestClient restTestClient;
-
     @MockitoBean
     private RandomSymbolService randomSymbolService;
 
@@ -32,7 +35,9 @@ class RockPaperScissorsHandlerTest {
         PlayGameRequest request = new PlayGameRequest(Symbol.SCISSORS);
 
         // when/then
-        this.restTestClient.post().uri("/rock-paper-scissors/play-game")
+        this.restTestClient.post()
+                .uri("/rock-paper-scissors/play-game")
+                .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .body(request)
                 .exchange()
                 .expectStatus().isOk()
@@ -47,7 +52,9 @@ class RockPaperScissorsHandlerTest {
         PlayGameRequest request = new PlayGameRequest(Symbol.SCISSORS);
 
         // when/then
-        this.restTestClient.post().uri("/rock-paper-scissors/play-game")
+        this.restTestClient.post()
+                .uri("/rock-paper-scissors/play-game")
+                .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .body(request)
                 .exchange()
                 .expectStatus().isOk()
@@ -62,7 +69,9 @@ class RockPaperScissorsHandlerTest {
         PlayGameRequest request = new PlayGameRequest(Symbol.ROCK);
 
         // when/then
-        this.restTestClient.post().uri("/rock-paper-scissors/play-game")
+        this.restTestClient.post()
+                .uri("/rock-paper-scissors/play-game")
+                .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .body(request)
                 .exchange()
                 .expectStatus().isOk()
@@ -73,7 +82,9 @@ class RockPaperScissorsHandlerTest {
     @Test
     void shouldReturnBadRequestGivenNoRequestBody() {
         // when/then
-        this.restTestClient.post().uri("/rock-paper-scissors/play-game")
+        this.restTestClient.post()
+                .uri("/rock-paper-scissors/play-game")
+                .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .exchange()
                 .expectStatus().isBadRequest();
     }
@@ -85,10 +96,38 @@ class RockPaperScissorsHandlerTest {
         PlayGameRequest request = new PlayGameRequest(Symbol.ROCK);
 
         // when/then
-        this.restTestClient.post().uri("/rock-paper-scissors/play-game")
+        this.restTestClient.post()
+                .uri("/rock-paper-scissors/play-game")
+                .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .body(request)
                 .exchange()
                 .expectStatus().is5xxServerError();
     }
 
+    @Test
+    void shouldReturnUnauthorizedGivenNoApiKey() {
+        // given
+        PlayGameRequest request = new PlayGameRequest(Symbol.SCISSORS);
+
+        // when/then
+        this.restTestClient.post()
+                .uri("/rock-paper-scissors/play-game")
+                .body(request)
+                .exchange()
+                .expectStatus().isUnauthorized();
+    }
+
+    @Test
+    void shouldReturnUnauthorizedGivenWrongApiKey() {
+        // given
+        PlayGameRequest request = new PlayGameRequest(Symbol.SCISSORS);
+
+        // when/then
+        this.restTestClient.post()
+                .uri("/rock-paper-scissors/play-game")
+                .headers(headers -> headers.set(API_KEY_HEADER_NAME, "wrong key"))
+                .body(request)
+                .exchange()
+                .expectStatus().isUnauthorized();
+    }
 }
