@@ -1,4 +1,3 @@
 export const environment = {
-    apiKey: '',
-    apiUrl: 'http://localhost:8080/rock-paper-scissors/play-game'
+    apiUrl: 'http://localhost:3000/api/rock-paper-scissors/play-game'
 };

@@ -9,7 +9,6 @@ import {environment} from "../environments/environment";
 })
 export class GameService {
     url = environment.apiUrl;
-    apiKey = environment.apiKey;
     private httpClient = inject(HttpClient);
 
     playGame(symbol: 'ROCK' | 'PAPER' | 'SCISSORS'): Observable<PlayGameResponse> {
@@ -17,11 +16,8 @@ export class GameService {
         const request = {playerSymbol: symbol};
 
         return this.httpClient
-            .post<PlayGameResponse>(this.url, request, {
-                headers: {
-                    'X-API-KEY': this.apiKey
-                },
-            })
+            // the API key is added in the NestJS backend for frontend
+            .post<PlayGameResponse>(this.url, request)
             .pipe(
                 catchError(() => {
                     throw new Error("An error occurred!");
