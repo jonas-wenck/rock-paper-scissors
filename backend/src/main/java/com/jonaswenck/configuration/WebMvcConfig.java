@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import static com.jonaswenck.security.AuthenticationService.API_KEY_HEADER_NAME;
 
 /**
- * This @{@link Configuration} makes sure that our local client may call the local server.
+ * This @{@link Configuration} makes sure that our proxy may call the local server.
  *
  */
 @Configuration
@@ -23,7 +23,7 @@ public class WebMvcConfig {
             @Override
             public void addCorsMappings(@Nonnull CorsRegistry registry) {
                 registry.addMapping("/rock-paper-scissors/play-game")
-                        // client origin
+                        // proxy origin
                         .allowedOrigins(allowedOrigins)
                         // we only need POST and OPTIONS for now
                         .allowedMethods("POST", "OPTIONS")

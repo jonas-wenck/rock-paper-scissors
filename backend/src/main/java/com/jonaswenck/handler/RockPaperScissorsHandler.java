@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * This @{@link RestController} exposes the rock, paper, scissors game to the client via REST.
+ * This @{@link RestController} exposes the rock, paper, scissors game via REST.
  */
 @RestController
 @RequestMapping("rock-paper-scissors")
