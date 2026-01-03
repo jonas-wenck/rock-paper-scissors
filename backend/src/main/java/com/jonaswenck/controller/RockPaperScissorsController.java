@@ -2,6 +2,7 @@ package com.jonaswenck.controller;
 
 import com.jonaswenck.constants.Result;
 import com.jonaswenck.constants.Symbol;
+import com.jonaswenck.dto.GetGameRecordsResponse;
 import com.jonaswenck.dto.PlayGameRequest;
 import com.jonaswenck.dto.PlayGameResponse;
 import com.jonaswenck.service.GameService;
@@ -51,6 +52,16 @@ public class RockPaperScissorsController {
         Result result = this.gameService.playGame(request.playerSymbol(), opponentSymbol, request.playerName());
 
         return new PlayGameResponse(request.playerSymbol(), opponentSymbol, result);
+    }
+
+    /**
+     * Returns all game records.
+     *
+     * @return the {@link GetGameRecordsResponse} contains a {@link java.util.List} of all {@link com.jonaswenck.dto.GameRecordDto} objects
+     */
+    @GetMapping("/get-game-records")
+    public GetGameRecordsResponse getGameRecords() {
+        return new GetGameRecordsResponse(this.gameService.getGameRecords());
     }
 
     /**

@@ -2,6 +2,7 @@ package com.jonaswenck.service;
 
 import com.jonaswenck.constants.Result;
 import com.jonaswenck.constants.Symbol;
+import com.jonaswenck.dto.GameRecordDto;
 import com.jonaswenck.repository.GameRecordRepository;
 import com.jonaswenck.repository.model.GameRecord;
 import jakarta.annotation.Nonnull;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
 /**
  * This service encapsulates the business logic of playing a game of rock, paper, scissors.
@@ -63,4 +66,14 @@ public class GameService {
         return result;
     }
 
+    /**
+     * Returns all {@link GameRecordDto} objects without guaranteeing any order.
+     *
+     * @return a {@link List} of {@link GameRecordDto} objects
+     */
+    public List<GameRecordDto> getGameRecords() {
+        return StreamSupport.stream(this.gameRecordRepository.findAll().spliterator(), false)
+                .map(gameRecord -> new GameRecordDto(gameRecord.getPlayerName(), gameRecord.getPlayerSymbol(), gameRecord.getOpponentSymbol(), gameRecord.getResult(), gameRecord.getTimestamp()))
+                .toList();
+    }
 }
