@@ -1,0 +1,1 @@
+Describe backend architecture, different layers, CORS and security config, small diagram of different layers
