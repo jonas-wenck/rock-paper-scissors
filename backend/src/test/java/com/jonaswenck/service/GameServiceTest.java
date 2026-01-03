@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @Import(GameService.class)
 class GameServiceTest {
-    
+
     @Autowired
     private GameService gameService;
 
@@ -58,27 +58,27 @@ class GameServiceTest {
     @MethodSource("providePlayerWinConfiguration")
     void shouldResultInPlayerWin(Symbol playerSymbol, Symbol opponentSymbol) {
         // when
-        Result result = this.gameService.playGame(playerSymbol, opponentSymbol, null);
+        GameRecordDto gameRecordDto = this.gameService.playGame(playerSymbol, opponentSymbol, null);
         // then
-        assertEquals(PLAYER_WIN, result);
+        assertEquals(PLAYER_WIN, gameRecordDto.result());
     }
 
     @ParameterizedTest
     @MethodSource("providePlayerLossConfiguration")
     void shouldResultInPlayerLoss(Symbol playerSymbol, Symbol opponentSymbol) {
         // when
-        Result result = this.gameService.playGame(playerSymbol, opponentSymbol, null);
+        GameRecordDto gameRecordDto = this.gameService.playGame(playerSymbol, opponentSymbol, null);
         // then
-        assertEquals(PLAYER_LOSS, result);
+        assertEquals(PLAYER_LOSS, gameRecordDto.result());
     }
 
     @ParameterizedTest
     @MethodSource("provideDrawConfiguration")
     void shouldResultInDraw(Symbol playerSymbol, Symbol opponentSymbol) {
         // when
-        Result result = this.gameService.playGame(playerSymbol, opponentSymbol, null);
+        GameRecordDto gameRecordDto = this.gameService.playGame(playerSymbol, opponentSymbol, null);
         // then
-        assertEquals(DRAW, result);
+        assertEquals(DRAW, gameRecordDto.result());
     }
 
     @Test

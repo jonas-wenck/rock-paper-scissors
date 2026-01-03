@@ -37,9 +37,9 @@ public class GameService {
      * @param playerSymbol   the {@link Symbol} chosen by the player
      * @param opponentSymbol the {@link Symbol} chosen by the opponent
      * @param playerName     the name of the player (optional)
-     * @return the {@link Result} of the symbol comparison.
+     * @return the {@link GameRecordDto} represents the game result
      */
-    public Result playGame(@Nonnull Symbol playerSymbol, @NonNull Symbol opponentSymbol, @Nullable String playerName) {
+    public GameRecordDto playGame(@Nonnull Symbol playerSymbol, @NonNull Symbol opponentSymbol, @Nullable String playerName) {
 
         LOGGER.debug("Player chose symbol {}.", playerSymbol);
         LOGGER.debug("Opponent chose symbol {}.", opponentSymbol);
@@ -61,9 +61,9 @@ public class GameService {
         }
 
         // persist the game record and use a fallback player name if none is given
-        this.gameRecordRepository.save(new GameRecord(playerName != null ? playerName : "Anonymous", playerSymbol, opponentSymbol, result, OffsetDateTime.now()));
+        GameRecord gameRecord = this.gameRecordRepository.save(new GameRecord(playerName != null ? playerName : "Anonymous", playerSymbol, opponentSymbol, result, OffsetDateTime.now()));
 
-        return result;
+        return this.toGameRecordDto(gameRecord);
     }
 
     /**
@@ -72,8 +72,13 @@ public class GameService {
      * @return a {@link List} of {@link GameRecordDto} objects
      */
     public List<GameRecordDto> getGameRecords() {
-        return StreamSupport.stream(this.gameRecordRepository.findAll().spliterator(), false)
-                .map(gameRecord -> new GameRecordDto(gameRecord.getPlayerName(), gameRecord.getPlayerSymbol(), gameRecord.getOpponentSymbol(), gameRecord.getResult(), gameRecord.getTimestamp()))
+        return StreamSupport
+                .stream(this.gameRecordRepository.findAll().spliterator(), false)
+                .map(this::toGameRecordDto)
                 .toList();
+    }
+
+    private GameRecordDto toGameRecordDto(GameRecord gameRecord) {
+        return new GameRecordDto(gameRecord.getPlayerName(), gameRecord.getPlayerSymbol(), gameRecord.getOpponentSymbol(), gameRecord.getResult(), gameRecord.getTimestamp());
     }
 }

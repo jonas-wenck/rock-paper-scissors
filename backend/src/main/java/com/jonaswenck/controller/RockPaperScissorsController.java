@@ -2,6 +2,7 @@ package com.jonaswenck.controller;
 
 import com.jonaswenck.constants.Result;
 import com.jonaswenck.constants.Symbol;
+import com.jonaswenck.dto.GameRecordDto;
 import com.jonaswenck.dto.GetGameRecordsResponse;
 import com.jonaswenck.dto.PlayGameRequest;
 import com.jonaswenck.dto.PlayGameResponse;
@@ -48,10 +49,11 @@ public class RockPaperScissorsController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        // determine the result
-        Result result = this.gameService.playGame(request.playerSymbol(), opponentSymbol, request.playerName());
+        // play the game
+        GameRecordDto gameRecordDto = this.gameService.playGame(request.playerSymbol(), opponentSymbol, request.playerName());
 
-        return new PlayGameResponse(request.playerSymbol(), opponentSymbol, result);
+        // transform to response
+        return new PlayGameResponse(gameRecordDto.playerSymbol(), gameRecordDto.opponentSymbol(), gameRecordDto.result());
     }
 
     /**

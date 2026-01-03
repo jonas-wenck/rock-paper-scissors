@@ -2,8 +2,8 @@ package com.jonaswenck.controller;
 
 import com.jonaswenck.configuration.SecurityConfig;
 import com.jonaswenck.constants.Symbol;
+import com.jonaswenck.dto.GameRecordDto;
 import com.jonaswenck.dto.PlayGameRequest;
-import com.jonaswenck.repository.GameRecordRepository;
 import com.jonaswenck.service.GameService;
 import com.jonaswenck.service.RandomSymbolService;
 import org.junit.jupiter.api.Test;
@@ -14,13 +14,21 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
+import java.time.OffsetDateTime;
+
+import static com.jonaswenck.constants.Result.*;
+import static com.jonaswenck.constants.Symbol.*;
 import static com.jonaswenck.security.AuthenticationService.API_KEY_HEADER_NAME;
 import static org.mockito.Mockito.when;
 
+/**
+ * This {@link WebMvcTest} tests the {@link RockPaperScissorsController} and not the service layer. We therefore mock both services and only test the controller itself regarding user input validation, authorization via API key and verifies the expected responses.
+ * <p>
+ * The {@link SecurityConfig} is not automatically pulled by @{@link WebMvcTest} so we import that manually to be able to test the API key mechanism.
+ */
 @WebMvcTest(RockPaperScissorsController.class)
 @AutoConfigureRestTestClient
-// import the beans that are not auto-imported by the @WebMvcTest-annotation
-@Import({GameService.class, SecurityConfig.class})
+@Import({SecurityConfig.class})
 class RockPaperScissorsControllerTest {
 
     private static final String TEST_API_KEY = "U86p7k1o7Q2Bgi4J3AVuOuCBu79MMF";
@@ -33,13 +41,14 @@ class RockPaperScissorsControllerTest {
     private RandomSymbolService randomSymbolService;
 
     @MockitoBean
-    private GameRecordRepository gameRecordRepository;
+    private GameService gameService;
 
     @Test
     void shouldReturnPlayerWinResponse() {
         // given
         when(this.randomSymbolService.generateRandomSymbol()).thenReturn(Symbol.PAPER);
-        PlayGameRequest request = new PlayGameRequest(Symbol.SCISSORS, TEST_PLAYER_NAME);
+        when(this.gameService.playGame(SCISSORS, PAPER, TEST_PLAYER_NAME)).thenReturn(new GameRecordDto(TEST_PLAYER_NAME, SCISSORS, PAPER, PLAYER_WIN, OffsetDateTime.now()));
+        PlayGameRequest request = new PlayGameRequest(SCISSORS, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
@@ -55,8 +64,9 @@ class RockPaperScissorsControllerTest {
     @Test
     void shouldReturnPlayerLossResponse() {
         // given
-        when(this.randomSymbolService.generateRandomSymbol()).thenReturn(Symbol.ROCK);
-        PlayGameRequest request = new PlayGameRequest(Symbol.SCISSORS, TEST_PLAYER_NAME);
+        when(this.randomSymbolService.generateRandomSymbol()).thenReturn(ROCK);
+        when(this.gameService.playGame(SCISSORS, ROCK, TEST_PLAYER_NAME)).thenReturn(new GameRecordDto(TEST_PLAYER_NAME, SCISSORS, ROCK, PLAYER_LOSS, OffsetDateTime.now()));
+        PlayGameRequest request = new PlayGameRequest(SCISSORS, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
@@ -72,8 +82,9 @@ class RockPaperScissorsControllerTest {
     @Test
     void shouldReturnDrawResponse() {
         // given
-        when(this.randomSymbolService.generateRandomSymbol()).thenReturn(Symbol.ROCK);
-        PlayGameRequest request = new PlayGameRequest(Symbol.ROCK, TEST_PLAYER_NAME);
+        when(this.randomSymbolService.generateRandomSymbol()).thenReturn(ROCK);
+        when(this.gameService.playGame(ROCK, ROCK, TEST_PLAYER_NAME)).thenReturn(new GameRecordDto(TEST_PLAYER_NAME, ROCK, ROCK, DRAW, OffsetDateTime.now()));
+        PlayGameRequest request = new PlayGameRequest(ROCK, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
@@ -113,7 +124,7 @@ class RockPaperScissorsControllerTest {
     @Test
     void shouldReturnBadRequestGivenBlankPlayerName() {
         // given
-        PlayGameRequest request = new PlayGameRequest(Symbol.ROCK, "");
+        PlayGameRequest request = new PlayGameRequest(ROCK, "");
 
         // when/then
         this.restTestClient.post()
@@ -128,7 +139,7 @@ class RockPaperScissorsControllerTest {
     void shouldReturnInternalServerErrorGivenNoOpponentSymbol() {
         // given
         when(this.randomSymbolService.generateRandomSymbol()).thenReturn(null);
-        PlayGameRequest request = new PlayGameRequest(Symbol.ROCK, TEST_PLAYER_NAME);
+        PlayGameRequest request = new PlayGameRequest(ROCK, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
@@ -142,7 +153,7 @@ class RockPaperScissorsControllerTest {
     @Test
     void shouldReturnUnauthorizedGivenNoApiKey() {
         // given
-        PlayGameRequest request = new PlayGameRequest(Symbol.SCISSORS, TEST_PLAYER_NAME);
+        PlayGameRequest request = new PlayGameRequest(SCISSORS, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
@@ -155,7 +166,7 @@ class RockPaperScissorsControllerTest {
     @Test
     void shouldReturnUnauthorizedGivenWrongApiKey() {
         // given
-        PlayGameRequest request = new PlayGameRequest(Symbol.SCISSORS, TEST_PLAYER_NAME);
+        PlayGameRequest request = new PlayGameRequest(SCISSORS, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
