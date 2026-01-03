@@ -1,4 +1,4 @@
-package com.jonaswenck.handler;
+package com.jonaswenck.dto;
 
 import com.jonaswenck.constants.Result;
 import com.jonaswenck.constants.Symbol;

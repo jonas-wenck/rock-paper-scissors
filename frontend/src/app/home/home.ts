@@ -1,14 +1,14 @@
 import {Component} from '@angular/core';
-import {Game} from "../game/game";
+import {PlayerConfig} from "../player-config/player-config";
 
 @Component({
     selector: 'app-home',
     imports: [
-        Game
+        PlayerConfig
     ],
     template: `
         <section>
-            <app-game/>
+            <app-player-config/>
         </section>
     `,
     styleUrls: [],

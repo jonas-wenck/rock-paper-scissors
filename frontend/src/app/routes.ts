@@ -1,17 +1,17 @@
 import {Routes} from '@angular/router';
 import {Home} from './home/home';
-// import {Details} from './details/details';
+import {Game} from "./game/game";
 
 const routeConfig: Routes = [
     {
         path: '',
         component: Home,
-        title: 'Home page',
+        title: 'Player configuration',
     },
-    // {
-    //     path: 'details/:id',
-    //     component: Details,
-    //     title: 'Home details',
-    // },
+    {
+        path: 'game/:playerName',
+        component: Game,
+        title: 'Play game',
+    },
 ];
 export default routeConfig;

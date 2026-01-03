@@ -2,16 +2,17 @@ package com.jonaswenck.service;
 
 import com.jonaswenck.constants.Result;
 import com.jonaswenck.constants.Symbol;
+import com.jonaswenck.repository.GameRecordRepository;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class GameServiceTest {
 
@@ -41,25 +42,19 @@ class GameServiceTest {
         );
     }
 
+    /**
+     * We initialize the service with a mock repo manually. If we used @{@link org.mockito.Mock} and @{@link org.mockito.InjectMocks}, we would declare an unused @Mock GameRepository reference as we only need an instance in the service but don't need to mock any behavior.
+     */
     @BeforeEach
     void setUp() {
-        this.service = new GameService();
-    }
-
-    @Test
-    void shouldThrowExceptionGivenNoSymbol() {
-        // when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> this.service.playGame(null, null));
-
-        // then
-        assertEquals("playerSymbol is null!", exception.getMessage());
+        this.service = new GameService(Mockito.mock(GameRecordRepository.class));
     }
 
     @ParameterizedTest
     @MethodSource("providePlayerWinConfiguration")
     void shouldResultInPlayerWin(Symbol playerSymbol, Symbol opponentSymbol) {
         // when
-        Result result = this.service.playGame(playerSymbol, opponentSymbol);
+        Result result = this.service.playGame(playerSymbol, opponentSymbol, null);
         // then
         assertEquals(Result.PLAYER_WIN, result);
     }
@@ -68,7 +63,7 @@ class GameServiceTest {
     @MethodSource("providePlayerLossConfiguration")
     void shouldResultInPlayerLoss(Symbol playerSymbol, Symbol opponentSymbol) {
         // when
-        Result result = this.service.playGame(playerSymbol, opponentSymbol);
+        Result result = this.service.playGame(playerSymbol, opponentSymbol, null);
         // then
         assertEquals(Result.PLAYER_LOSS, result);
     }
@@ -77,7 +72,7 @@ class GameServiceTest {
     @MethodSource("provideDrawConfiguration")
     void shouldResultInDraw(Symbol playerSymbol, Symbol opponentSymbol) {
         // when
-        Result result = this.service.playGame(playerSymbol, opponentSymbol);
+        Result result = this.service.playGame(playerSymbol, opponentSymbol, null);
         // then
         assertEquals(Result.DRAW, result);
     }
