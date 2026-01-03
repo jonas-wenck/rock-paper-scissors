@@ -6,12 +6,12 @@ const routeConfig: Routes = [
     {
         path: '',
         component: Home,
-        title: 'Player configuration',
+        title: 'Rock, Paper, Scissors - enter your name',
     },
     {
         path: 'game/:playerName',
         component: Game,
-        title: 'Play game',
+        title: 'Rock, Paper, Scissors - select your symbol',
     },
 ];
 export default routeConfig;
