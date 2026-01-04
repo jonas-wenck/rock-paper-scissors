@@ -1,9 +1,10 @@
 import {inject, Injectable} from '@angular/core';
-import {PlayGameResponse} from "./play-game-response";
+import {PlayGameResponse} from "./dto/play-game-response";
 import {HttpClient} from "@angular/common/http";
 import {catchError, Observable} from "rxjs";
 import {environment} from "../environments/environment";
-import {GetGameRecordsResponse} from "./get-game-records-response";
+import {GetGameRecordsResponse} from "./dto/get-game-records-response";
+import {GameSymbol} from "./dto/game-symbol";
 
 @Injectable({
     providedIn: 'root',
@@ -12,7 +13,7 @@ export class GameService {
     url = environment.apiUrl;
     private httpClient = inject(HttpClient);
 
-    playGame(symbol: 'ROCK' | 'PAPER' | 'SCISSORS', playerName: string): Observable<PlayGameResponse> {
+    playGame(symbol: GameSymbol, playerName: string): Observable<PlayGameResponse> {
         // create the request with the player symbol
         const request = {playerSymbol: symbol, playerName: playerName};
 

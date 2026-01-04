@@ -5,7 +5,7 @@ import {
     MatTextColumn
 } from "@angular/material/table";
 import {Observable} from "rxjs";
-import {GetGameRecordsResponse} from "../get-game-records-response";
+import {GetGameRecordsResponse} from "../dto/get-game-records-response";
 import {GameService} from "../game.service";
 import {AsyncPipe} from "@angular/common";
 
