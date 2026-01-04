@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Post,
@@ -14,27 +15,53 @@ import { firstValueFrom } from 'rxjs';
  */
 @Controller('api/rock-paper-scissors')
 export class AppController {
+  backendBaseUrl: string | undefined;
+  backendApiKey: string | undefined;
+
   constructor(
     private httpService: HttpService,
     private configService: ConfigService,
-  ) {}
+  ) {
+    this.backendBaseUrl = this.configService.get<string>('BACKEND_BASE_URL');
+    this.backendApiKey = this.configService.get<string>('BACKEND_API_KEY');
+  }
 
   @Post('play-game')
   async playGame(@Body() body: any): Promise<any> {
-    const backendUrl = this.configService.get<string>('BACKEND_URL');
-    const backendApiKey = this.configService.get<string>('BACKEND_API_KEY');
+    const backendUrl = this.backendBaseUrl + '/play-game';
 
-    if (backendUrl && backendApiKey) {
+    if (backendUrl && this.backendApiKey) {
       const response = await firstValueFrom(
         this.httpService.post(
           backendUrl,
           body, // only send the request body
           {
             headers: {
-              'X-API-KEY': backendApiKey,
+              'X-API-KEY': this.backendApiKey,
             },
           },
         ),
+      );
+      return response.data;
+    } else {
+      throw new HttpException(
+        'An internal error occurred',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get('get-game-records')
+  async getGameRecords(): Promise<any> {
+    const backendUrl = this.backendBaseUrl + '/get-game-records';
+
+    if (backendUrl && this.backendApiKey) {
+      const response = await firstValueFrom(
+        this.httpService.get(backendUrl, {
+          headers: {
+            'X-API-KEY': this.backendApiKey,
+          },
+        }),
       );
       return response.data;
     } else {

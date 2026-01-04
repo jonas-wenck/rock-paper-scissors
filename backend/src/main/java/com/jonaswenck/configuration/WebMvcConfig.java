@@ -22,7 +22,7 @@ public class WebMvcConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(@Nonnull CorsRegistry registry) {
-                registry.addMapping("/rock-paper-scissors/play-game")
+                registry.addMapping("/rock-paper-scissors/**")
                         // proxy origin
                         .allowedOrigins(allowedOrigins)
                         // we only need POST and OPTIONS for now
