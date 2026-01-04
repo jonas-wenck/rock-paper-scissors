@@ -4,8 +4,8 @@ import com.jonaswenck.constants.Result;
 import com.jonaswenck.constants.Symbol;
 import com.jonaswenck.dto.GameRecordDto;
 import com.jonaswenck.dto.GetGameRecordsResponse;
-import com.jonaswenck.dto.PlayGameRequest;
-import com.jonaswenck.dto.PlayGameResponse;
+import com.jonaswenck.dto.PostGameRequest;
+import com.jonaswenck.dto.PostGameResponse;
 import com.jonaswenck.service.GameService;
 import com.jonaswenck.service.RandomSymbolService;
 import jakarta.validation.Valid;
@@ -36,11 +36,11 @@ public class RockPaperScissorsController {
     /**
      * Handle the POST-mapping to play a game of rock, paper, scissors.
      *
-     * @param request the {@link PlayGameRequest} needs to be valid as devised in the class
-     * @return the {@link PlayGameResponse} contains the {@link Symbol} from the {@code request}, the opponent's {@link Symbol} as well as the game {@link Result}.
+     * @param request the {@link PostGameRequest} needs to be valid as devised in the class
+     * @return the {@link PostGameResponse} contains the {@link Symbol} from the {@code request}, the opponent's {@link Symbol} as well as the game {@link Result}.
      */
-    @PostMapping("/play-game")
-    public PlayGameResponse playGame(@RequestBody @Valid PlayGameRequest request) {
+    @PostMapping("/game")
+    public PostGameResponse postGame(@RequestBody @Valid PostGameRequest request) {
 
         // generate symbol for the opponent
         Symbol opponentSymbol = this.randomSymbolService.generateRandomSymbol();
@@ -53,7 +53,7 @@ public class RockPaperScissorsController {
         GameRecordDto gameRecordDto = this.gameService.playGame(request.playerSymbol(), opponentSymbol, request.playerName());
 
         // transform to response
-        return new PlayGameResponse(gameRecordDto.playerSymbol(), gameRecordDto.opponentSymbol(), gameRecordDto.result());
+        return new PostGameResponse(gameRecordDto.playerSymbol(), gameRecordDto.opponentSymbol(), gameRecordDto.result());
     }
 
     /**
@@ -61,7 +61,7 @@ public class RockPaperScissorsController {
      *
      * @return the {@link GetGameRecordsResponse} contains a {@link java.util.List} of all {@link com.jonaswenck.dto.GameRecordDto} objects
      */
-    @GetMapping("/get-game-records")
+    @GetMapping("/game-records")
     public GetGameRecordsResponse getGameRecords() {
         return new GetGameRecordsResponse(this.gameService.getGameRecords());
     }

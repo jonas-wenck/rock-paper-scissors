@@ -26,9 +26,9 @@ export class AppController {
     this.backendApiKey = this.configService.get<string>('BACKEND_API_KEY');
   }
 
-  @Post('play-game')
-  async playGame(@Body() body: any): Promise<any> {
-    const backendUrl = this.backendBaseUrl + '/play-game';
+  @Post('game')
+  async postGame(@Body() body: any): Promise<any> {
+    const backendUrl = this.backendBaseUrl + '/game';
 
     if (backendUrl && this.backendApiKey) {
       const response = await firstValueFrom(
@@ -51,9 +51,9 @@ export class AppController {
     }
   }
 
-  @Get('get-game-records')
+  @Get('game-records')
   async getGameRecords(): Promise<any> {
-    const backendUrl = this.backendBaseUrl + '/get-game-records';
+    const backendUrl = this.backendBaseUrl + '/game-records';
 
     if (backendUrl && this.backendApiKey) {
       const response = await firstValueFrom(

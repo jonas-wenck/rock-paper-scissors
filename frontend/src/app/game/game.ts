@@ -1,7 +1,7 @@
 import {Component, inject, signal} from '@angular/core';
 import {GameService} from "../game.service";
 import {Observable} from "rxjs";
-import {PlayGameResponse} from "../types/play-game-response";
+import {PostGameResponse} from "../types/post-game-response";
 import {AsyncPipe} from "@angular/common";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
@@ -17,10 +17,10 @@ import {GameSymbol} from "../types/game-symbol";
     ],
     template: `
         <div>
-            @if (playGameResponseObservable | async; as response) {
+            @if (postGameResponseObservable | async; as response) {
                 <div class="flex flex-col gap-6">
                     <!-- result view-->
-                    <app-result [playGameResponse]="response" [playerName]="playerName()"/>
+                    <app-result [postGameResponse]="response" [playerName]="playerName()"/>
                     <div class="flex flex-col items-center">
                         <div class="flex gap-6">
                             <!-- play again with the current user name -->
@@ -63,7 +63,7 @@ export class Game {
     // inject the game service
     gameService: GameService = inject(GameService);
     // initialize the game response observable
-    playGameResponseObservable: Observable<PlayGameResponse> | null = null;
+    postGameResponseObservable: Observable<PostGameResponse> | null = null;
     // we need the activated route to read the player name
     private activatedRoute = inject(ActivatedRoute);
 
@@ -76,10 +76,10 @@ export class Game {
 
     playGame(symbol: GameSymbol) {
         // update the observable
-        this.playGameResponseObservable = this.gameService.playGame(symbol, this.playerName());
+        this.postGameResponseObservable = this.gameService.postGame(symbol, this.playerName());
     }
 
     reset() {
-        this.playGameResponseObservable = null;
+        this.postGameResponseObservable = null;
     }
 }
