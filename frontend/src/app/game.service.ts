@@ -1,10 +1,10 @@
 import {inject, Injectable} from '@angular/core';
-import {PlayGameResponse} from "./dto/play-game-response";
+import {PlayGameResponse} from "./types/play-game-response";
 import {HttpClient} from "@angular/common/http";
 import {catchError, Observable} from "rxjs";
 import {environment} from "../environments/environment";
-import {GetGameRecordsResponse} from "./dto/get-game-records-response";
-import {GameSymbol} from "./dto/game-symbol";
+import {GetGameRecordsResponse} from "./types/get-game-records-response";
+import {GameSymbol} from "./types/game-symbol";
 
 @Injectable({
     providedIn: 'root',

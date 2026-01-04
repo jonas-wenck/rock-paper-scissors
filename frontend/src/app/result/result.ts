@@ -1,5 +1,5 @@
 import {Component, input} from '@angular/core';
-import {PlayGameResponse} from "../dto/play-game-response";
+import {PlayGameResponse} from "../types/play-game-response";
 import {SingleResult} from "../single-result/single-result";
 
 @Component({

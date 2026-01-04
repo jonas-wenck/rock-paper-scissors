@@ -6,9 +6,5 @@ export interface GameRecord {
     playerSymbol: GameSymbol;
     opponentSymbol: GameSymbol;
     result: GameResult;
-    timestamp: string;
-}
-
-export interface GetGameRecordsResponse {
-    gameRecords: [GameRecord]
+    timestamp: Date;
 }

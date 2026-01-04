@@ -1,14 +1,14 @@
 import {Component, inject, signal} from '@angular/core';
 import {GameService} from "../game.service";
 import {Observable} from "rxjs";
-import {PlayGameResponse} from "../dto/play-game-response";
+import {PlayGameResponse} from "../types/play-game-response";
 import {AsyncPipe} from "@angular/common";
 import {MatButton, MatFabButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Result} from "../result/result";
 import {MatTooltip} from "@angular/material/tooltip";
 import {ActivatedRoute, RouterLink} from '@angular/router';
-import {GameSymbol} from "../dto/game-symbol";
+import {GameSymbol} from "../types/game-symbol";
 
 @Component({
     selector: 'app-game',
