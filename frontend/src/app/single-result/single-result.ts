@@ -1,30 +1,34 @@
-import {Component, input} from '@angular/core';
-import {NgOptimizedImage} from "@angular/common";
+import { Component, input } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
-    selector: 'app-single-result',
-    imports: [
-        NgOptimizedImage
-    ],
-    template: `
-        <div class="flex flex-col items-center p-6">
-            <p class="text-4xl pb-12">{{ title() }}</p>
-            <div class="flex flex-col items-center outline-2 rounded-lg p-4">
-                <p class="text-2xl pb-6">{{ symbol() }}</p>
-                <!-- we use an empty alt-attribute here as this image is decorative-->
-                <img [ngSrc]="imageMap[symbol()]" height="100" width="100" alt="" priority/>
-            </div>
-        </div>
-    `,
-    styles: ``,
+  selector: 'app-single-result',
+  imports: [NgOptimizedImage],
+  template: `
+    <div class="flex flex-col items-center p-6">
+      <p class="text-4xl pb-12">{{ title() }}</p>
+      <div class="flex flex-col items-center outline-2 rounded-lg p-4">
+        <p class="text-2xl pb-6">{{ symbol() }}</p>
+        <!-- we use an empty alt-attribute here as this image is decorative-->
+        <img
+          [ngSrc]="imageMap[symbol()]"
+          height="100"
+          width="100"
+          alt=""
+          priority
+        />
+      </div>
+    </div>
+  `,
+  styles: ``,
 })
 export class SingleResult {
-    title = input.required<string>();
-    symbol = input.required<"ROCK" | "PAPER" | "SCISSORS">();
+  title = input.required<string>();
+  symbol = input.required<'ROCK' | 'PAPER' | 'SCISSORS'>();
 
-    readonly imageMap: Record<string, string> = {
-        'ROCK': 'assets/rock-svgrepo-com.svg',
-        'PAPER': 'assets/rolled-up-newspaper-svgrepo-com.svg',
-        'SCISSORS': 'assets/scissors-svgrepo-com.svg',
-    };
+  readonly imageMap: Record<string, string> = {
+    ROCK: 'assets/rock-svgrepo-com.svg',
+    PAPER: 'assets/rolled-up-newspaper-svgrepo-com.svg',
+    SCISSORS: 'assets/scissors-svgrepo-com.svg',
+  };
 }
