@@ -54,9 +54,9 @@ import { Router } from '@angular/router';
   styles: ``,
 })
 export class PlayerConfig {
-  playerName = new FormControl('', [Validators.required]);
-  errorMessage = signal('');
-  private router = inject(Router);
+  protected playerName = new FormControl('', [Validators.required]);
+  protected errorMessage = signal('');
+  private readonly router = inject(Router);
 
   constructor() {
     merge(this.playerName.statusChanges, this.playerName.valueChanges)
@@ -64,15 +64,15 @@ export class PlayerConfig {
       .subscribe(() => this.updateErrorMessage());
   }
 
-  updateErrorMessage() {
+  protected navigateToGame(): void {
+    this.router.navigate(['/game', this.playerName.value]);
+  }
+
+  protected updateErrorMessage(): void {
     if (this.playerName.hasError('required')) {
       this.errorMessage.set('You must enter a value');
     } else {
       this.errorMessage.set('');
     }
-  }
-
-  navigateToGame() {
-    this.router.navigate(['/game', this.playerName.value]);
   }
 }

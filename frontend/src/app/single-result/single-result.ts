@@ -25,8 +25,7 @@ import { NgOptimizedImage } from '@angular/common';
 export class SingleResult {
   title = input.required<string>();
   symbol = input.required<'ROCK' | 'PAPER' | 'SCISSORS'>();
-
-  readonly imageMap: Record<string, string> = {
+  protected readonly imageMap: Record<string, string> = {
     ROCK: 'assets/rock-svgrepo-com.svg',
     PAPER: 'assets/rolled-up-newspaper-svgrepo-com.svg',
     SCISSORS: 'assets/scissors-svgrepo-com.svg',

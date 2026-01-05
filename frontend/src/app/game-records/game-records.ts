@@ -12,11 +12,13 @@ import {
   MatTable,
   MatTextColumn,
 } from '@angular/material/table';
-import { Observable } from 'rxjs';
+import { catchError, EMPTY, Observable } from 'rxjs';
 import { GameService } from '../game.service';
 import { AsyncPipe, DatePipe, TitleCasePipe } from '@angular/common';
 import { GameResultPipe } from '../pipes/game-result-pipe';
 import { GameRecord } from '../types/game-record';
+import { ErrorPopUp } from '../error-pop-up/error-pop-up';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-game-records',
@@ -84,19 +86,28 @@ import { GameRecord } from '../types/game-record';
   styles: ``,
 })
 export class GameRecords {
-  gameService: GameService = inject(GameService);
-  gameRecordsObservable: Observable<[GameRecord]> | null = null;
-
-  columnsToDisplay = [
+  protected columnsToDisplay = [
     'playerName',
     'playerSymbol',
     'opponentSymbol',
     'result',
     'timestamp',
   ];
+  protected gameRecordsObservable: Observable<[GameRecord]> | null = null;
+  private readonly gameService: GameService = inject(GameService);
+  private readonly dialog = inject(MatDialog);
 
   constructor() {
     // retrieve the game records from the API, this simple implementation without a proper datasource is sufficient here
-    this.gameRecordsObservable = this.gameService.getGameRecords();
+    this.gameRecordsObservable = this.gameService.getGameRecords().pipe(
+      catchError(() => {
+        this.showErrorDialog();
+        return EMPTY;
+      }),
+    );
+  }
+
+  private showErrorDialog(): void {
+    this.dialog.open(ErrorPopUp, {});
   }
 }

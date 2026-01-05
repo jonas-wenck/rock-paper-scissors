@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { GameService } from '../game.service';
-import { Observable } from 'rxjs';
+import { catchError, EMPTY, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { MatButton, MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -9,6 +9,8 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GameSymbol } from '../types/game-symbol';
 import { GameRecord } from '../types/game-record';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorPopUp } from '../error-pop-up/error-pop-up';
 
 @Component({
   selector: 'app-game',
@@ -77,30 +79,39 @@ import { GameRecord } from '../types/game-record';
 })
 export class Game {
   // we retrieve the player name from the route
-  playerName = signal('');
-  // inject the game service
-  gameService: GameService = inject(GameService);
+  protected playerName = signal('');
   // initialize the observable
-  gameRecordObservable: Observable<GameRecord> | null = null;
+  protected gameRecordObservable: Observable<GameRecord> | null = null;
+  // inject the game service
+  private readonly gameService: GameService = inject(GameService);
+  private readonly dialog = inject(MatDialog);
   // we need the activated route to read the player name
-  private activatedRoute = inject(ActivatedRoute);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
   constructor() {
-    this.activatedRoute.params.subscribe((params) => {
+    this.activatedRoute.params.subscribe((params) =>
       // set the player name for this session
-      this.playerName.set(params['playerName']);
-    });
-  }
-
-  playGame(symbol: GameSymbol) {
-    // update the observable
-    this.gameRecordObservable = this.gameService.postGame(
-      symbol,
-      this.playerName(),
+      this.playerName.set(params['playerName']),
     );
   }
 
-  reset() {
+  protected playGame(symbol: GameSymbol): void {
+    // update the observable
+    this.gameRecordObservable = this.gameService
+      .postGame(symbol, this.playerName())
+      .pipe(
+        catchError(() => {
+          this.showErrorDialog();
+          return EMPTY;
+        }),
+      );
+  }
+
+  protected reset(): void {
     this.gameRecordObservable = null;
+  }
+
+  private showErrorDialog(): void {
+    this.dialog.open(ErrorPopUp, {});
   }
 }
