@@ -3,7 +3,7 @@ package com.jonaswenck.controller;
 import com.jonaswenck.configuration.SecurityConfig;
 import com.jonaswenck.constants.Symbol;
 import com.jonaswenck.dto.GameRecordDto;
-import com.jonaswenck.dto.PostGameRequest;
+import com.jonaswenck.dto.PlayGameRequest;
 import com.jonaswenck.service.GameService;
 import com.jonaswenck.service.RandomSymbolService;
 import org.junit.jupiter.api.Test;
@@ -33,6 +33,7 @@ class RockPaperScissorsControllerTest {
 
     private static final String TEST_API_KEY = "U86p7k1o7Q2Bgi4J3AVuOuCBu79MMF";
     private static final String TEST_PLAYER_NAME = "Jonas";
+    private static final String URI = "/rock-paper-scissors/games";
 
     @Autowired
     private RestTestClient restTestClient;
@@ -48,17 +49,19 @@ class RockPaperScissorsControllerTest {
         // given
         when(this.randomSymbolService.generateRandomSymbol()).thenReturn(Symbol.PAPER);
         when(this.gameService.playGame(SCISSORS, PAPER, TEST_PLAYER_NAME)).thenReturn(new GameRecordDto(TEST_PLAYER_NAME, SCISSORS, PAPER, PLAYER_WIN, OffsetDateTime.now()));
-        PostGameRequest request = new PostGameRequest(SCISSORS, TEST_PLAYER_NAME);
+        PlayGameRequest request = new PlayGameRequest(SCISSORS, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
-                .uri("/rock-paper-scissors/game")
+                .uri(URI)
                 .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .body(request)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(String.class)
-                .isEqualTo("{\"playerSymbol\":\"SCISSORS\",\"opponentSymbol\":\"PAPER\",\"result\":\"PLAYER_WIN\"}");
+                .expectBody()
+                .jsonPath("$.playerSymbol").isEqualTo("SCISSORS")
+                .jsonPath("$.opponentSymbol").isEqualTo("PAPER")
+                .jsonPath("$.result").isEqualTo("PLAYER_WIN");
     }
 
     @Test
@@ -66,17 +69,19 @@ class RockPaperScissorsControllerTest {
         // given
         when(this.randomSymbolService.generateRandomSymbol()).thenReturn(ROCK);
         when(this.gameService.playGame(SCISSORS, ROCK, TEST_PLAYER_NAME)).thenReturn(new GameRecordDto(TEST_PLAYER_NAME, SCISSORS, ROCK, PLAYER_LOSS, OffsetDateTime.now()));
-        PostGameRequest request = new PostGameRequest(SCISSORS, TEST_PLAYER_NAME);
+        PlayGameRequest request = new PlayGameRequest(SCISSORS, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
-                .uri("/rock-paper-scissors/game")
+                .uri(URI)
                 .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .body(request)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(String.class)
-                .isEqualTo("{\"playerSymbol\":\"SCISSORS\",\"opponentSymbol\":\"ROCK\",\"result\":\"PLAYER_LOSS\"}");
+                .expectBody()
+                .jsonPath("$.playerSymbol").isEqualTo("SCISSORS")
+                .jsonPath("$.opponentSymbol").isEqualTo("ROCK")
+                .jsonPath("$.result").isEqualTo("PLAYER_LOSS");
     }
 
     @Test
@@ -84,24 +89,26 @@ class RockPaperScissorsControllerTest {
         // given
         when(this.randomSymbolService.generateRandomSymbol()).thenReturn(ROCK);
         when(this.gameService.playGame(ROCK, ROCK, TEST_PLAYER_NAME)).thenReturn(new GameRecordDto(TEST_PLAYER_NAME, ROCK, ROCK, DRAW, OffsetDateTime.now()));
-        PostGameRequest request = new PostGameRequest(ROCK, TEST_PLAYER_NAME);
+        PlayGameRequest request = new PlayGameRequest(ROCK, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
-                .uri("/rock-paper-scissors/game")
+                .uri(URI)
                 .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .body(request)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(String.class)
-                .isEqualTo("{\"playerSymbol\":\"ROCK\",\"opponentSymbol\":\"ROCK\",\"result\":\"DRAW\"}");
+                .expectBody()
+                .jsonPath("$.playerSymbol").isEqualTo("ROCK")
+                .jsonPath("$.opponentSymbol").isEqualTo("ROCK")
+                .jsonPath("$.result").isEqualTo("DRAW");
     }
 
     @Test
     void shouldReturnBadRequestGivenNoRequestBody() {
         // when/then
         this.restTestClient.post()
-                .uri("/rock-paper-scissors/game")
+                .uri(URI)
                 .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .exchange()
                 .expectStatus().isBadRequest();
@@ -110,11 +117,11 @@ class RockPaperScissorsControllerTest {
     @Test
     void shouldReturnBadRequestGivenNoPlayerSymbol() {
         // given
-        PostGameRequest request = new PostGameRequest(null, TEST_PLAYER_NAME);
+        PlayGameRequest request = new PlayGameRequest(null, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
-                .uri("/rock-paper-scissors/game")
+                .uri(URI)
                 .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .body(request)
                 .exchange()
@@ -124,11 +131,11 @@ class RockPaperScissorsControllerTest {
     @Test
     void shouldReturnBadRequestGivenBlankPlayerName() {
         // given
-        PostGameRequest request = new PostGameRequest(ROCK, "");
+        PlayGameRequest request = new PlayGameRequest(ROCK, "");
 
         // when/then
         this.restTestClient.post()
-                .uri("/rock-paper-scissors/game")
+                .uri(URI)
                 .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .body(request)
                 .exchange()
@@ -139,11 +146,11 @@ class RockPaperScissorsControllerTest {
     void shouldReturnInternalServerErrorGivenNoOpponentSymbol() {
         // given
         when(this.randomSymbolService.generateRandomSymbol()).thenReturn(null);
-        PostGameRequest request = new PostGameRequest(ROCK, TEST_PLAYER_NAME);
+        PlayGameRequest request = new PlayGameRequest(ROCK, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
-                .uri("/rock-paper-scissors/game")
+                .uri(URI)
                 .headers(headers -> headers.set(API_KEY_HEADER_NAME, TEST_API_KEY))
                 .body(request)
                 .exchange()
@@ -153,11 +160,11 @@ class RockPaperScissorsControllerTest {
     @Test
     void shouldReturnUnauthorizedGivenNoApiKey() {
         // given
-        PostGameRequest request = new PostGameRequest(SCISSORS, TEST_PLAYER_NAME);
+        PlayGameRequest request = new PlayGameRequest(SCISSORS, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
-                .uri("/rock-paper-scissors/game")
+                .uri(URI)
                 .body(request)
                 .exchange()
                 .expectStatus().isUnauthorized();
@@ -166,11 +173,11 @@ class RockPaperScissorsControllerTest {
     @Test
     void shouldReturnUnauthorizedGivenWrongApiKey() {
         // given
-        PostGameRequest request = new PostGameRequest(SCISSORS, TEST_PLAYER_NAME);
+        PlayGameRequest request = new PlayGameRequest(SCISSORS, TEST_PLAYER_NAME);
 
         // when/then
         this.restTestClient.post()
-                .uri("/rock-paper-scissors/game")
+                .uri(URI)
                 .headers(headers -> headers.set(API_KEY_HEADER_NAME, "wrong key"))
                 .body(request)
                 .exchange()

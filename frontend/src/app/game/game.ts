@@ -1,7 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { GameService } from '../game.service';
 import { Observable } from 'rxjs';
-import { PostGameResponse } from '../types/post-game-response';
 import { AsyncPipe } from '@angular/common';
 import { MatButton, MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -9,6 +8,7 @@ import { Result } from '../result/result';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GameSymbol } from '../types/game-symbol';
+import { GameRecord } from '../types/game-record';
 
 @Component({
   selector: 'app-game',
@@ -23,13 +23,10 @@ import { GameSymbol } from '../types/game-symbol';
   ],
   template: `
     <div>
-      @if (postGameResponseObservable | async; as response) {
+      @if (gameRecordObservable | async; as gameRecord) {
         <div class="flex flex-col gap-6">
           <!-- result view-->
-          <app-result
-            [postGameResponse]="response"
-            [playerName]="playerName()"
-          />
+          <app-result [gameRecord]="gameRecord" [playerName]="playerName()" />
           <div class="flex flex-col items-center">
             <div class="flex gap-6">
               <!-- play again with the current user name -->
@@ -83,8 +80,8 @@ export class Game {
   playerName = signal('');
   // inject the game service
   gameService: GameService = inject(GameService);
-  // initialize the game response observable
-  postGameResponseObservable: Observable<PostGameResponse> | null = null;
+  // initialize the observable
+  gameRecordObservable: Observable<GameRecord> | null = null;
   // we need the activated route to read the player name
   private activatedRoute = inject(ActivatedRoute);
 
@@ -97,13 +94,13 @@ export class Game {
 
   playGame(symbol: GameSymbol) {
     // update the observable
-    this.postGameResponseObservable = this.gameService.postGame(
+    this.gameRecordObservable = this.gameService.postGame(
       symbol,
       this.playerName(),
     );
   }
 
   reset() {
-    this.postGameResponseObservable = null;
+    this.gameRecordObservable = null;
   }
 }

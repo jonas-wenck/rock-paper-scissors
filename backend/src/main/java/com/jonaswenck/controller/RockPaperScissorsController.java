@@ -1,11 +1,8 @@
 package com.jonaswenck.controller;
 
-import com.jonaswenck.constants.Result;
 import com.jonaswenck.constants.Symbol;
 import com.jonaswenck.dto.GameRecordDto;
-import com.jonaswenck.dto.GetGameRecordsResponse;
-import com.jonaswenck.dto.PostGameRequest;
-import com.jonaswenck.dto.PostGameResponse;
+import com.jonaswenck.dto.PlayGameRequest;
 import com.jonaswenck.service.GameService;
 import com.jonaswenck.service.RandomSymbolService;
 import jakarta.validation.Valid;
@@ -16,13 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * This @{@link RestController} exposes the rock, paper, scissors game via REST.
  */
 @RestController
-@RequestMapping("rock-paper-scissors")
+@RequestMapping("rock-paper-scissors/games")
 public class RockPaperScissorsController {
 
     private final GameService gameService;
@@ -36,11 +34,11 @@ public class RockPaperScissorsController {
     /**
      * Handle the POST-mapping to play a game of rock, paper, scissors.
      *
-     * @param request the {@link PostGameRequest} needs to be valid as devised in the class
-     * @return the {@link PostGameResponse} contains the {@link Symbol} from the {@code request}, the opponent's {@link Symbol} as well as the game {@link Result}.
+     * @param request the {@link PlayGameRequest} needs to be valid as devised in the class
+     * @return the {@link GameRecordDto} represents the played game
      */
-    @PostMapping("/game")
-    public PostGameResponse postGame(@RequestBody @Valid PostGameRequest request) {
+    @PostMapping
+    public GameRecordDto play(@RequestBody @Valid PlayGameRequest request) {
 
         // generate symbol for the opponent
         Symbol opponentSymbol = this.randomSymbolService.generateRandomSymbol();
@@ -50,20 +48,17 @@ public class RockPaperScissorsController {
         }
 
         // play the game
-        GameRecordDto gameRecordDto = this.gameService.playGame(request.playerSymbol(), opponentSymbol, request.playerName());
-
-        // transform to response
-        return new PostGameResponse(gameRecordDto.playerSymbol(), gameRecordDto.opponentSymbol(), gameRecordDto.result());
+        return this.gameService.playGame(request.playerSymbol(), opponentSymbol, request.playerName());
     }
 
     /**
      * Returns all game records.
      *
-     * @return the {@link GetGameRecordsResponse} contains a {@link java.util.List} of all {@link com.jonaswenck.dto.GameRecordDto} objects
+     * @return the {@link java.util.List} of all game records
      */
-    @GetMapping("/game-records")
-    public GetGameRecordsResponse getGameRecords() {
-        return new GetGameRecordsResponse(this.gameService.getGameRecords());
+    @GetMapping
+    public List<GameRecordDto> getAll() {
+        return this.gameService.getGameRecords();
     }
 
     /**

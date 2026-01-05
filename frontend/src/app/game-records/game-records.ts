@@ -13,10 +13,10 @@ import {
   MatTextColumn,
 } from '@angular/material/table';
 import { Observable } from 'rxjs';
-import { GetGameRecordsResponse } from '../types/get-game-records-response';
 import { GameService } from '../game.service';
 import { AsyncPipe, DatePipe, TitleCasePipe } from '@angular/common';
 import { GameResultPipe } from '../pipes/game-result-pipe';
+import { GameRecord } from '../types/game-record';
 
 @Component({
   selector: 'app-game-records',
@@ -39,11 +39,9 @@ import { GameResultPipe } from '../pipes/game-result-pipe';
   ],
   template: `
     <div class="flex items-center m-4">
-      @if (getGameRecordsResponseObservable | async; as response) {
-        @if (
-          response && response.gameRecords && response.gameRecords.length > 0
-        ) {
-          <table mat-table [dataSource]="response.gameRecords">
+      @if (gameRecordsObservable | async; as gameRecords) {
+        @if (gameRecords && gameRecords.length > 0) {
+          <table mat-table [dataSource]="gameRecords">
             <mat-text-column
               name="playerName"
               headerText="Name"
@@ -87,8 +85,7 @@ import { GameResultPipe } from '../pipes/game-result-pipe';
 })
 export class GameRecords {
   gameService: GameService = inject(GameService);
-  getGameRecordsResponseObservable: Observable<GetGameRecordsResponse> | null =
-    null;
+  gameRecordsObservable: Observable<[GameRecord]> | null = null;
 
   columnsToDisplay = [
     'playerName',
@@ -100,6 +97,6 @@ export class GameRecords {
 
   constructor() {
     // retrieve the game records from the API, this simple implementation without a proper datasource is sufficient here
-    this.getGameRecordsResponseObservable = this.gameService.getGameRecords();
+    this.gameRecordsObservable = this.gameService.getGameRecords();
   }
 }
