@@ -63,5 +63,5 @@ yarn-error.log*
 /backend-for-frontend/.env
 
 # Embedded H2 data
-/data/dev-db.mv.db
-/data/dev-db.trace.db
+/backend/data/dev-db.mv.db
+/backend/data/dev-db.trace.db
