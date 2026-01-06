@@ -7,17 +7,17 @@ const routeConfig: Routes = [
   {
     path: '',
     component: Home,
-    title: 'Rock, Paper, Scissors - enter your name',
+    title: 'Enter your name | Rock, Paper, Scissors',
   },
   {
     path: 'game/:playerName',
     component: Game,
-    title: 'Rock, Paper, Scissors - select your symbol',
+    title: 'Select your symbol | Rock, Paper, Scissors',
   },
   {
     path: 'game-records',
     component: GameRecords,
-    title: 'Rock, Paper, Scissors - game records',
+    title: 'Game records | Rock, Paper, Scissors',
   },
 ];
 export default routeConfig;
