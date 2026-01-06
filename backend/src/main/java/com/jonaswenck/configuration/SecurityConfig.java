@@ -5,6 +5,7 @@ import com.jonaswenck.security.AuthenticationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -27,23 +28,34 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationFilter authenticationFilter(AuthenticationService authenticationService) {
-        return new AuthenticationFilter(authenticationService);
+    @Order(1)
+    SecurityFilterChain actuatorChain(HttpSecurity httpSecurity) {
+        httpSecurity
+                // match the actuator endpoints
+                .securityMatcher("/actuator/**")
+                // disable CSRF protection
+                .csrf(AbstractHttpConfigurer::disable)
+                // permit all requests
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+        return httpSecurity.build();
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationFilter authenticationFilter) {
+    @Order(2)
+    public SecurityFilterChain gameChain(HttpSecurity httpSecurity, AuthenticationService authenticationService) {
         httpSecurity
+                // match the rock paper scissors endpoints
+                .securityMatcher("/rock-paper-scissors/**")
                 // we secure our stateless API with API keys and have no user sessions, so we do not need CSRF protection
                 .csrf(AbstractHttpConfigurer::disable)
                 // this makes sure that our Spring MVC CORS configuration is used so that CORS can be processed before Spring Security
                 .cors(withDefaults())
                 // we require all requests to be authorized
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry.requestMatchers("/**").authenticated())
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
                 // our API is stateless
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // our API key needs to be evaluated before the username/pw filter
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                // our API key needs to be evaluated before the username/pw filter; this filter needs to be instantiated as a bean would end up in the other chain as well
+                .addFilterBefore(new AuthenticationFilter(authenticationService), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }
