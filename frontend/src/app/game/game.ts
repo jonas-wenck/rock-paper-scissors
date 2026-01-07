@@ -41,7 +41,9 @@ import { ErrorPopUp } from '../error-pop-up/error-pop-up';
       } @else {
         <!-- play game view-->
         <div class="flex flex-col items-center gap-6">
-          <h2 class="text-4xl">{{ playerName() }}, select your symbol</h2>
+          <h2 class="text-4xl text-center">
+            {{ playerName() }}, select your symbol
+          </h2>
           <div class="flex flex-row gap-3">
             <button
               matFab

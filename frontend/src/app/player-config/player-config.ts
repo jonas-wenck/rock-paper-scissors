@@ -26,7 +26,7 @@ import { Router } from '@angular/router';
   ],
   template: `
     <div class="flex flex-col items-center gap-6">
-      <h2 class="text-4xl">Enter your name</h2>
+      <h2 class="text-4xl text-center">Enter your name</h2>
       <form>
         <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>

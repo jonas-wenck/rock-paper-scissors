@@ -40,47 +40,50 @@ import { MatDialog } from '@angular/material/dialog';
     GameResultPipe,
   ],
   template: `
-    <div class="flex items-center m-4">
-      @if (gameRecordsObservable | async; as gameRecords) {
-        @if (gameRecords && gameRecords.length > 0) {
-          <table mat-table [dataSource]="gameRecords">
-            <mat-text-column
-              name="playerName"
-              headerText="Name"
-            ></mat-text-column>
-            <ng-container matColumnDef="playerSymbol">
-              <th mat-header-cell *matHeaderCellDef>Player symbol</th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.playerSymbol | titlecase }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="opponentSymbol">
-              <th mat-header-cell *matHeaderCellDef>Opponent symbol</th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.opponentSymbol | titlecase }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="result">
-              <th mat-header-cell *matHeaderCellDef>Result</th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.result | gameresult }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="timestamp">
-              <th mat-header-cell *matHeaderCellDef>Timestamp</th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.timestamp | date: 'long' }}
-              </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-            <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
-          </table>
-        } @else {
-          <p class="m-auto">
-            There are no game records yet. Start playing to create some!
-          </p>
+    <div class="flex flex-col items-center gap-6">
+      <h2 class="text-4xl text-center">Game records</h2>
+      <div class="flex items-center m-4">
+        @if (gameRecordsObservable | async; as gameRecords) {
+          @if (gameRecords && gameRecords.length > 0) {
+            <table mat-table [dataSource]="gameRecords">
+              <mat-text-column
+                name="playerName"
+                headerText="Name"
+              ></mat-text-column>
+              <ng-container matColumnDef="playerSymbol">
+                <th mat-header-cell *matHeaderCellDef>Player symbol</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.playerSymbol | titlecase }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="opponentSymbol">
+                <th mat-header-cell *matHeaderCellDef>Opponent symbol</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.opponentSymbol | titlecase }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="result">
+                <th mat-header-cell *matHeaderCellDef>Result</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.result | gameresult }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="timestamp">
+                <th mat-header-cell *matHeaderCellDef>Timestamp</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.timestamp | date: 'long' }}
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+              <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+            </table>
+          } @else {
+            <p class="m-auto">
+              There are no game records yet. Start playing to create some!
+            </p>
+          }
         }
-      }
+      </div>
     </div>
   `,
   styles: ``,

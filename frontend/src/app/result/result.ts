@@ -9,11 +9,17 @@ import { GameRecord } from '../types/game-record';
     <!-- display the result-->
     <div class="flex flex-col items-center">
       @if (gameRecord().result === 'PLAYER_WIN') {
-        <h2 class="text-4xl text-green-600">{{ playerName() }}, you win!</h2>
+        <h2 class="text-4xl text-green-600 text-center">
+          {{ playerName() }}, you win!
+        </h2>
       } @else if (gameRecord().result === 'PLAYER_LOSS') {
-        <h2 class="text-4xl text-red-500">{{ playerName() }}, you loose!</h2>
+        <h2 class="text-4xl text-red-500 text-center">
+          {{ playerName() }}, you loose!
+        </h2>
       } @else if (gameRecord().result === 'DRAW') {
-        <h2 class="text-4xl text-black">{{ playerName() }}, it's a draw!</h2>
+        <h2 class="text-4xl text-black text-center">
+          {{ playerName() }}, it's a draw!
+        </h2>
       }
     </div>
     <div class="flex justify-between">
