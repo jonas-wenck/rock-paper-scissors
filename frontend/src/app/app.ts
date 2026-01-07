@@ -7,8 +7,7 @@ import { MatButton } from '@angular/material/button';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, MatIcon, MatButton],
-  template: ` <main>
-    <!-- we only add vertical margin because we have no margin-right for some reason if we add it all around -->
+  template: ` <!-- we only add vertical margin because we have no margin-right for some reason if we add it all around -->
     <header
       class="relative flex flex-col sm:flex-row items-center my-4 pb-4 w-full border-b-2 gap-4 sm:gap-0"
     >
@@ -43,10 +42,11 @@ import { MatButton } from '@angular/material/button';
         >Game records</a
       >
     </header>
-    <section class="content">
-      <router-outlet />
-    </section>
-  </main>`,
+    <main>
+      <section class="content">
+        <router-outlet />
+      </section>
+    </main>`,
   styleUrls: [],
 })
 export class App {
