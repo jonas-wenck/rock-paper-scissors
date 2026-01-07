@@ -26,6 +26,9 @@ dependencies {
     implementation 'com.h2database:h2'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    // this is required for the docker-compose setup
+    runtimeOnly 'org.postgresql:postgresql'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
