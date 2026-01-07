@@ -12,7 +12,11 @@ import { MatButton } from '@angular/material/button';
       class="relative flex flex-col sm:flex-row items-center my-4 pb-4 w-full border-b-2 gap-4 sm:gap-0"
     >
       <!-- always center -->
-      <a routerLink="/" class="sm:absolute sm:left-1/2 sm:-translate-x-1/2">
+      <a
+        routerLink="/"
+        class="sm:absolute sm:left-1/2 sm:-translate-x-1/2"
+        aria-label="Back to homepage"
+      >
         <h1 class="m-0 flex items-center gap-1 text-2xl">
           <mat-icon
             aria-hidden="true"
