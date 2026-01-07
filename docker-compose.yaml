@@ -28,7 +28,11 @@ services:
       - POSTGRES_USER=Backend
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=rock-paper-scissors-db
+    volumes:
+      - db-data:/var/lib/postgresql
     expose:
       - 5432
+volumes:
+  db-data:
 networks:
   spring-postgres:
