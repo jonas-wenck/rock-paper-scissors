@@ -1,25 +1,24 @@
-# this is adapted from here: https://docs.nestjs.com/deployment#dockerizing-your-application
+# -------- Stage 1: BUILD --------
+FROM node:25-alpine AS builder
 
-# Use the official Node.js image as the base image
-FROM node:25
+WORKDIR /app
 
-# Set the working directory inside the container
-WORKDIR /usr/src/app
-
-# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
+RUN npm ci
 
-# Install the application dependencies
-RUN npm install
-
-# Copy the rest of the application files
 COPY . .
-
-# Build the NestJS application
 RUN npm run build
 
-# Expose the application port
-EXPOSE 3000
 
-# Command to run the application
-CMD ["node", "dist/main"]
+# -------- Stage 2: RUNTIME --------
+FROM node:25-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 3000
+CMD ["node", "dist/main.js"]
