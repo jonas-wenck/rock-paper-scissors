@@ -162,6 +162,22 @@ Even though I am using multi-stage build for at least some of the apps, the dock
 One option for the Spring Boot backend image would be to create a custom runtime only containing the required modules as
 described [here](https://medium.com/@ievgen.degtiarenko/reduce-size-of-docker-image-with-spring-boot-application-2b3632263350).
 
+## #2: rework the Angular frontend docker-compose setup
+
+Right now, we use the [production environment](frontend/src/environments/environment.production.ts) for the
+docker-compose
+configuration. This is because Angular needs the configuration at build time and not at run time like docker-compose.
+This is not ideal as the configuration for the backend as well as the backend-for-frontend is all in the
+`docker-compose.yaml` and the `.env`-file and only for the Angular frontend we depend on other configuration within the
+app sources. There exist numerous articles on this topic as well as
+a [NPM](https://www.npmjs.com/package/angular-server-side-configuration) module that could not be tested out within the
+scope
+of this project.
+
+We also need a Nginx to serve the Angular frontend as configured in [nginx.conf](frontend/nginx.conf). In summary, the
+Angular
+setup for docker-compose is not ideal here and should be refined.
+
 ## #2: get a second opinion
 
 As this application was implemented in a team of one, it missed valuable input from other team members e.g. in the form
@@ -176,3 +192,9 @@ setup. Penetration testing can show potential security issues before they can ca
 ## #4: set up TLS for https
 
 Right now, all communication is only via http. In a production-environment, TLS should be setup to enable https.
+
+## #5: step up to Kubernetes
+
+The docker-compose setup is a good starting point for containerization but the next step should be to bring it all to a
+Kubernetes cluster as e.g.
+described [here](https://kubernetes.io/docs/tasks/configure-pod-container/translate-compose-kubernetes/).
