@@ -28,7 +28,7 @@ out/
 
 ### Angular ###
 # Angular specific
-/dist/
+/frontend/dist/
 /out-tsc/
 /tmp/
 /coverage/
@@ -64,3 +64,4 @@ yarn-error.log*
 # Embedded H2 data
 /backend/data/dev-db.mv.db
 /backend/data/dev-db.trace.db
+

@@ -44,19 +44,11 @@
             "outputPath": "dist/rock-paper-scissors",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon",
-              "src/assets"
-            ],
-            "styles": [
-              "src/material-theme.scss",
-              "src/styles.css"
-            ],
+            "assets": ["src/favicon", "src/assets"],
+            "styles": ["src/material-theme.scss", "src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -73,7 +65,13 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.production.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
