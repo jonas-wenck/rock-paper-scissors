@@ -49,7 +49,7 @@ works with an in-memory H2 database to test the game logic as well as the databa
 We use an embedded H2 for the standalone-setup and a PostgreSQL for the docker-compose-setup. Both databases are purely
 configuration via `application.properties` or `docker-compose.yaml` so the application code is database-agnostic.
 
-# Setup
+# Project setup
 
 To build the application on its own, you need to have Gradle as well as a Java 25 JDK on the local machine. You need to
 add a [secrets.properties](src/main/resources/secrets.properties) file to include the API-key with an arbitrary value:
