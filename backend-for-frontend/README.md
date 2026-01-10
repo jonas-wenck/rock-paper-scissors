@@ -1,7 +1,8 @@
 ## NestJS backend-for-frontend
 
 The NestJS backend-for-frontend proxies the requests from the frontend to the backend and adds the API-key as a header.
-This allows us to not expose the API key in the browser. This application is there
+This allows us to not expose the API key in the browser. This application is therefore simply the `AppController` that
+proxies the API requests.
 
 It was created by using the [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 

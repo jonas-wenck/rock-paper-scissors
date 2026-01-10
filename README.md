@@ -178,7 +178,12 @@ We also need a Nginx to serve the Angular frontend as configured in [nginx.conf]
 Angular
 setup for docker-compose is not ideal here and should be refined.
 
-## #3: use OpenAPI for stable API documentation
+## #3: add tests for the Angular frontend
+
+The Angular frontend is currently missing tests. This situation should be remedied by primarily implementing tests for
+the various components. Writing tests in Angular is documented [here](https://angular.dev/guide/testing).
+
+## #4: use OpenAPI for stable API documentation
 
 Right now, we have no automatic documentation for both the Spring Boot API and the backend-for-frontend API. We rely on
 the implementations which is fine in this small context but could be improved upon. We could generate OpenAPI
@@ -186,22 +191,22 @@ documentation for Spring Boot and display it with Swagger UI as
 described [here](https://www.baeldung.com/spring-rest-openapi-documentation). That document could then serve as a stable
 API for the backend-for-frontend which in turn could generate a stable API documentation for the frontend.
 
-## #4: get a second opinion
+## #5: get a second opinion
 
 As this application was implemented in a team of one, it missed valuable input from other team members e.g. in the form
 of pull requests.
 
-## #5: perform both load and penetration testing
+## #6: perform both load and penetration testing
 
 Before bringing a new application to production, it would be wise to perform both load and penetration testing. Load
 testing could a) show if the application can handle the expected traffic and b) what sizing is required in a Kubernetes
 setup. Penetration testing can show potential security issues before they can cause any harm.
 
-## #6: set up TLS for https
+## #7: set up TLS for https
 
 Right now, all communication is only via http. In a production-environment, TLS should be setup to enable https.
 
-## #7: step up to Kubernetes
+## #8: step up to Kubernetes
 
 The docker-compose setup is a good starting point for containerization but the next step should be to bring it all to a
 Kubernetes cluster as e.g.
