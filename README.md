@@ -173,5 +173,6 @@ Before bringing a new application to production, it would be wise to perform bot
 testing could a) show if the application can handle the expected traffic and b) what sizing is required in a Kubernetes
 setup. Penetration testing can show potential security issues before they can cause any harm.
 
+## #4: set up TLS for https
 
-
+Right now, all communication is only via http. In a production-environment, TLS should be setup to enable https.
