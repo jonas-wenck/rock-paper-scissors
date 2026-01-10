@@ -1,6 +1,6 @@
 # this is adapted from: https://medium.com/@nadir.inab.dev/dockerizing-your-angular-app-a-quick-guide-00a3ecabe419
 
-FROM node:25 as build
+FROM node:24-alpine as build
 
 WORKDIR /app
 
