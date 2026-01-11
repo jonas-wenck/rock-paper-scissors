@@ -54,10 +54,12 @@ configuration via `application.properties` or `docker-compose.yaml` so the appli
 # Project setup
 
 To build the application on its own, you need to have Gradle as well as a Java 25 JDK on the local machine. You need to
-add a [secrets.properties](src/main/resources/secrets.properties) file to include the API-key with an arbitrary value:
+add a [secrets.properties](src/main/resources/secrets.properties) file to include the API-key and the database password
+with some values:
 
 ```
 api.key=someKey
+spring.datasource.password=somePassword
 ```
 
 Run `gradle build` to run all tests and build the application and use

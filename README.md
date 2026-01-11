@@ -94,7 +94,7 @@ checked into Git to prevent leaking of sensitive information. The .env file need
 values can be chosen as desired as they are referenced at all relevant locations in the docker-compose file.
 
 ```
-DB_PASSWORD=132
+DB_PASSWORD=123
 API_KEY=456
 ```
 
