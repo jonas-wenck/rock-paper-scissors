@@ -70,7 +70,7 @@ found [here](backend/README.md).
 
 ## NestJS backend-for-frontend
 
-As the Spring Boot API is protected by an API key and Angular does not come with a backend like e.g. NextJS does, I
+As the Spring Boot API is protected by an API key and Angular does not come with a backend like e.g. Next.js does, I
 decided to implement a custom backend-for-frontend to not expose the API key in the browser as that would forfeit its
 purpose. The backend-for-frontend is very slim and only adds the API-key header to the requests coming from the
 frontend. Details
@@ -88,7 +88,7 @@ The three applications can be built and started independently as described in th
 and URL-configs are already present for each application.
 
 A closer-to-production alternative is to run the [Docker-compose setup](docker-compose.yaml). It features a PostgreSQL
-database and all docker files build their applications first so no NodeJS, Java or anything is required on the host
+database and all docker files build their applications first so no Node.js, Java or anything is required on the host
 machine. To run the Docker compose-setup, simply create a [.env](.env) file at the root of this repository. None is
 checked into Git to prevent leaking of sensitive information. The .env file needs to have the following properties. Both
 values can be chosen as desired as they are referenced at all relevant locations in the docker-compose file.
@@ -134,9 +134,9 @@ without deploying the applications somewhere.
 
 An alternative to NestJS would have been to
 use [Angular server-side rendering and proxy the requests there](https://angular.dev/guide/ssr). As the docker-compose
-setup uses an Nginx instance to deliver the Angular frontend, it would have also been possible to proxy the API requests
+setup uses a Nginx instance to deliver the Angular frontend, it would have also been possible to proxy the API requests
 via the Nginx and add the API key there. Another alternative would have been to not secure the Spring Boot API in the
-first place but I did not choose that option on purpose.
+first place, but I did not choose that option on purpose.
 
 ## #2: define fewer features
 

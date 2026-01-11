@@ -17,7 +17,7 @@ We have 3 primary routes/views:
 # Libraries
 
 To quickly deliver an accessible and user-friendly frontend, we use the proven components from
-the [Angular Material UI component library](https://material.angular.dev/). For layouting the frontend and simpler UI
+the [Angular Material UI component library](https://material.angular.dev/). For the frontend layout and simpler UI
 elements, we use [Tailwind](https://tailwindcss.com/). This combination of powerful libraries allowed us to focus on the
 application logic instead of creating core components like buttons from scratch.
 

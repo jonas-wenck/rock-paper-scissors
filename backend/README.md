@@ -28,7 +28,7 @@ to make sure that the database is not only up and running but contains a table f
 
 # Logging and observability
 
-Logging is implemented for all relevant components with `org.slf4j.Logger` instances and appropiate log levels.
+Logging is implemented for all relevant components with `org.slf4j.Logger` instances and appropriate log levels.
 
 Spring default actuators as well as the custom `GameHealthIndicator` are exposed under `/actuator`. The health-actuator
 shows some more details. Those details are not exposed in the close-to-production-ready docker-compose setup. The
