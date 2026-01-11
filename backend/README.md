@@ -31,7 +31,9 @@ to make sure that the database is not only up and running but contains a table f
 Logging is implemented for all relevant components with `org.slf4j.Logger` instances and appropiate log levels.
 
 Spring default actuators as well as the custom `GameHealthIndicator` are exposed under `/actuator`. The health-actuator
-shows some more details. Those details are not exposed in the close-to-production-ready docker-compose setup.
+shows some more details. Those details are not exposed in the close-to-production-ready docker-compose setup. The
+integration of actuators allows us to communicate the liveliness and readiness states of our backend in a potential
+Kubernetes setup so that the pod can be excluded from load balancing (readiness fails) or restarted (liveliness fails).
 
 ![health-actuator.png](../images/health-actuator.png)
 
