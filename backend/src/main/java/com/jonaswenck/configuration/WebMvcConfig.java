@@ -25,8 +25,8 @@ public class WebMvcConfig {
                 registry.addMapping("/rock-paper-scissors/games/**")
                         // proxy origin
                         .allowedOrigins(allowedOrigins)
-                        // we only need POST and OPTIONS for now
-                        .allowedMethods("POST", "OPTIONS")
+                        // we need POST, OPTIONS and GET for now
+                        .allowedMethods("POST", "OPTIONS", "GET")
                         // allow X-API-KEY and content type header
                         .allowedHeaders(API_KEY_HEADER_NAME, HttpHeaders.CONTENT_TYPE);
             }

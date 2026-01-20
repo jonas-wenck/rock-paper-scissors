@@ -9,7 +9,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: allowedOrigin, // Allow Angular client
-    methods: 'POST,OPTIONS', // Allow HTTP methods
+    methods: 'POST,OPTIONS,GET', // Allow HTTP methods
     allowedHeaders: 'Content-Type, X-API-KEY', // Permitted request headers
   });
   await app.listen(process.env.PORT ?? 3000);
