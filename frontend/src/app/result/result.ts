@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
 import { SingleResult } from '../single-result/single-result';
 import { GameRecord } from '../types/game-record';
+import { GameResult } from '../types/game-result';
 
 @Component({
   selector: 'app-result',
@@ -8,15 +9,15 @@ import { GameRecord } from '../types/game-record';
   template: `
     <!-- display the result-->
     <div class="flex flex-col items-center">
-      @if (gameRecord().result === 'PLAYER_WIN') {
+      @if (gameRecord().result === GameResult.PLAYER_WIN) {
         <h2 class="text-4xl text-green-600 text-center">
           {{ playerName() }}, you win!
         </h2>
-      } @else if (gameRecord().result === 'PLAYER_LOSS') {
+      } @else if (gameRecord().result === GameResult.PLAYER_LOSS) {
         <h2 class="text-4xl text-red-500 text-center">
           {{ playerName() }}, you loose!
         </h2>
-      } @else if (gameRecord().result === 'DRAW') {
+      } @else if (gameRecord().result === GameResult.DRAW) {
         <h2 class="text-4xl text-black text-center">
           {{ playerName() }}, it's a draw!
         </h2>
@@ -37,4 +38,6 @@ import { GameRecord } from '../types/game-record';
 export class Result {
   gameRecord = input.required<GameRecord>();
   playerName = input.required<string>();
+  // this is required so that Angular can access the enum type in the template
+  protected readonly GameResult = GameResult;
 }

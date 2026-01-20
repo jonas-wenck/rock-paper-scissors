@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
+import { GameSymbol } from '../types/game-symbol';
 
 @Component({
   selector: 'app-single-result',
@@ -24,10 +25,10 @@ import { NgOptimizedImage } from '@angular/common';
 })
 export class SingleResult {
   title = input.required<string>();
-  symbol = input.required<'ROCK' | 'PAPER' | 'SCISSORS'>();
-  protected readonly imageMap: Record<string, string> = {
-    ROCK: 'assets/rock-svgrepo-com.svg',
-    PAPER: 'assets/rolled-up-newspaper-svgrepo-com.svg',
-    SCISSORS: 'assets/scissors-svgrepo-com.svg',
+  symbol = input.required<GameSymbol>();
+  protected readonly imageMap: Record<GameSymbol, string> = {
+    [GameSymbol.ROCK]: 'assets/rock-svgrepo-com.svg',
+    [GameSymbol.PAPER]: 'assets/rolled-up-newspaper-svgrepo-com.svg',
+    [GameSymbol.SCISSORS]: 'assets/scissors-svgrepo-com.svg',
   };
 }

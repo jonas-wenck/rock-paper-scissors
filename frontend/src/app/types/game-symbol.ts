@@ -1,1 +1,5 @@
-export type GameSymbol = 'ROCK' | 'PAPER' | 'SCISSORS';
+export enum GameSymbol {
+  ROCK = 'ROCK',
+  PAPER = 'PAPER',
+  SCISSORS = 'SCISSORS',
+}

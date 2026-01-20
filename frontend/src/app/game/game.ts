@@ -48,7 +48,7 @@ import { ErrorPopUp } from '../error-pop-up/error-pop-up';
             <button
               matFab
               extended
-              (click)="playGame('ROCK')"
+              (click)="playGame(GameSymbol.ROCK)"
               matTooltip="Beats scissors and is beaten by paper."
             >
               <mat-icon svgIcon="rock"></mat-icon>
@@ -57,7 +57,7 @@ import { ErrorPopUp } from '../error-pop-up/error-pop-up';
             <button
               matFab
               extended
-              (click)="playGame('PAPER')"
+              (click)="playGame(GameSymbol.PAPER)"
               matTooltip="Beats rock and is beaten by scissors."
             >
               <mat-icon svgIcon="paper"></mat-icon>
@@ -66,7 +66,7 @@ import { ErrorPopUp } from '../error-pop-up/error-pop-up';
             <button
               matFab
               extended
-              (click)="playGame('SCISSORS')"
+              (click)="playGame(GameSymbol.SCISSORS)"
               matTooltip="Beats paper and is beaten by rock."
             >
               <mat-icon svgIcon="scissors"></mat-icon>
@@ -84,6 +84,8 @@ export class Game {
   protected playerName = signal('');
   // initialize the observable
   protected gameRecordObservable: Observable<GameRecord> | null = null;
+  // this is required so that Angular can access the enum type in the template
+  protected readonly GameSymbol = GameSymbol;
   // inject the game service
   private readonly gameService: GameService = inject(GameService);
   private readonly dialog = inject(MatDialog);

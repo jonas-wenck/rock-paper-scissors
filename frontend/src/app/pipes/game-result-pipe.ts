@@ -10,11 +10,11 @@ import { GameResult } from '../types/game-result';
 export class GameResultPipe implements PipeTransform {
   transform(value: GameResult): string {
     switch (value) {
-      case 'PLAYER_WIN':
+      case GameResult.PLAYER_WIN:
         return 'Win';
-      case 'PLAYER_LOSS':
+      case GameResult.PLAYER_LOSS:
         return 'Loss';
-      case 'DRAW':
+      case GameResult.DRAW:
         return 'Draw';
       default:
         return '';
